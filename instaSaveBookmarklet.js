@@ -32,19 +32,14 @@
 		outputHeader.setAttribute("style", "position: relative;");
 		outputDiv.appendChild(outputHeader);
 		/* brandname creation, setting and appending */
-		var appName = document.createElement("h2");
-		var appNameTxt = document.createTextNode("Save Our Selfies");
-
+		var appName = insertText("h2", "Save Our Selfies");
 
 		appName.setAttribute("style", "margin-bottom: 15px; font-weight: bold; font-family: 'Helvetica', 'Helvetica-Nueue', sans-serif; font-size: 24px;");
-		appName.appendChild(appNameTxt);
 		outputHeader.appendChild(appName);
 		/* close widget, setting and appending */
-		var closeButton = document.createElement("span");
-		var closeTxt = document.createTextNode("\u00D7");
+		var closeButton = insertText("span", "\u00D7");
 
 		closeButton.setAttribute("style", "position: absolute; top: 0; right: 0; cursor: pointer; font-size: 48px; line-height: 0.5; color: #f00;");
-		closeButton.appendChild(closeTxt);
 		closeButton.addEventListener("click", function() {
 			closeWidget();
 		});
@@ -52,28 +47,20 @@
 
 		
 		/* instructions creation, setting and appending */
-		var outputInstruct = document.createElement("p");
-		var instructionsTxt = document.createTextNode("Click on a link to open image in new tab. Then right click on the image and 'Save image as'. Click 'Refresh' to get links for any updated on-screen images.");
+		var outputInstruct = insertText("p", "Click on a link to open image in new tab. Then right click on the image and 'Save image as'. Click 'Refresh' to get links for any updated on-screen images.");
 
 		outputInstruct.setAttribute("style", "font-size: 12px; line-height: 1; margin-bottom: 15px;");
-		outputInstruct.appendChild(instructionsTxt);
 		outputHeader.appendChild(outputInstruct);
 
 		/*refresh button and setting*/
-		var outputRefresh = document.createElement("a");
-		var refreshTxt = document.createTextNode("Refresh");
+		var outputRefresh = insertText("a", "Refresh", "sos-output-refresh");
 
 		outputRefresh.setAttribute("style", "background-color: #29d; color: #fff; padding: 5px 4px; margin-bottom: 10px; cursor: pointer; display: block;");
-		outputRefresh.setAttribute("id", "sos-output-refresh");
-		outputRefresh.appendChild(refreshTxt);
-		outputHeader.appendChild(outputRefresh);
+		outputRefresh.addEventListener("click", function() {
 		/* assign event listener to call script again */
-		var refreshButton = document.getElementById("sos-output-refresh");
-
-		refreshButton.addEventListener("click", function() {
 			getImageLinks();
 		});
-
+		outputHeader.appendChild(outputRefresh);
 		createHeader();	
 
 		/*create the link list area*/
@@ -84,11 +71,12 @@
 
 
 	} else {
+		/*does exist so clear the list upon refresh*/
 		var headerElement = document.getElementById("sos-title");
+		var outputList = document.getElementById("sos-output-list");
+
 		headerElement.parentNode.removeChild(headerElement);
 		createHeader();
-		/*does exist so clear the list upon refresh*/
-		var outputList = document.getElementById("sos-output-list");
 		while (outputList.lastChild) {
 		  outputList.removeChild(outputList.lastChild);
 		}
@@ -97,8 +85,7 @@
 
 	for(i=0; i<srcArray.length; i++) {
 		var listItem = document.createElement("li");
-		var imgLink = document.createElement("a");
-		var linkTxt = document.createTextNode( 'image link ' + (i + 1) );
+		var imgLink = insertText("a", "image link " + (i + 1));
 
 		/* create, set attributes and append the links to the output div*/
 		listItem.setAttribute("style", "display: inline-block; width: 50%;");
@@ -106,7 +93,6 @@
 		imgLink.setAttribute("href", srcArray[i]);
 		imgLink.setAttribute("target", "_blank");
 		imgLink.setAttribute("style", "color: #29d; margin-bottom: 10px; display: block;");
-		imgLink.appendChild(linkTxt);
 		listItem.appendChild(imgLink);
 		document.getElementById("sos-output-list").appendChild(listItem);
 	}
@@ -116,15 +102,26 @@
 		widget.parentNode.removeChild(widget);
 	}
 
+	/* create an element, insert text to it and optional id */
+	function insertText (element, text, id) {
+		var elem = document.createElement(element);
+		var txt = document.createTextNode(text);
+		id = id || '';
+
+		if (id !== '') {
+			elem.setAttribute("id", id);
+		}
+		elem.appendChild(txt);
+
+		return elem;
+	}
+
+	/* create the content for the output div*/
 	function createHeader () {
 		var outputElement = document.getElementById("sos-output-header");
-		/* create the content for the output div*/
-		var headerTitle = document.createElement("h3");
+		var headerTitle = insertText("h3","Image Links (" + parents.length + ")", "sos-title");
 		/* style the header*/
-		headerTitle.setAttribute("id", "sos-title");
 		headerTitle.setAttribute("style", "font-weight: bold; text-transform: uppercase; margin-bottom: 15px;");
-		var outputTxt = document.createTextNode("Image Links (" + parents.length + ")");
-		headerTitle.appendChild(outputTxt);
 		outputElement.appendChild(headerTitle);
 
 	}
