@@ -1,7 +1,6 @@
 (function getImageLinks() {
 	var srcArray = [];
 
-	/* TODO modularize the fk out of all this mess quite a lot of repeated procedure */
 	/* grab all the parent containers that identify posted images*/
 	var parents = document.getElementsByClassName("_jjzlb");
 
